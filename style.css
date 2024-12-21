@@ -1,0 +1,65 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f9;
+  overflow: hidden;
+}
+
+h1 {
+  color: #333;
+  margin: 20px;
+}
+
+#score, #misses {
+  font-size: 18px;
+  color: #007BFF;
+}
+
+button {
+  margin: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+#game-area {
+  position: relative;
+  width: 500px; /* Reduced width */
+  height: 400px; /* Reduced height */
+  background: #e0f7fa;
+  border: 2px solid #007BFF;
+  margin: 20px auto; /* Center the game area */
+  overflow: hidden;
+}
+
+#basket {
+  position: absolute;
+  bottom: 10px; /* Closer to the bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px; /* Smaller basket */
+  height: 10px; /* Shorter height */
+  background: #007BFF;
+  border-radius: 5px;
+}
+
+#falling-item {
+  position: absolute;
+  top: -30px; /* Start above the play area */
+  left: 50%;
+  width: 20px; /* Smaller falling item */
+  height: 20px;
+  background: red;
+  border-radius: 50%;
+}
