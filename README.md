@@ -109,9 +109,9 @@ body {
 
 ```
 
-### 3. Create 2 JavaScript Files
+### 3. Create 2 JavaScript Files -- Only if file has not been created already
 
-Create a file named `scoreboard.js` --Only if file has not been created already
+Create a file named `scoreboard.js` 
 ```scoreboard
 export const scoreboard = {
   score: 0,
@@ -143,13 +143,12 @@ export const scoreboard = {
 ```
 
 Create a file named `script.js` 
- 
 
 ### 4. Step-by-Step Guide to Script.js
 
-1. Initialize Game Elements
-- Start by identifying the elements of your game in the HTML file.
-- Use `document.getElementById()` to get references to these elements
+1. Find the Important Parts of the Game
+- We need to tell the computer where the basket, the falling item, and the buttons are in the HTML.
+- To do that, we "grab" them using JavaScript.
 ```
 // Get references to HTML elements
 const basket = document.getElementById("basket"); // The basket element
@@ -158,10 +157,12 @@ const startButton = document.getElementById("start-game"); // Start button
 const stopButton = document.getElementById("stop-game"); // Stop button
 ```
 
-2. Define Game Variables
-- Create variables to track the game state, including the position of the basket and falling item.
-- Initialize variables to control the score, misses, and whether the game is running.
-- 
+2. Keep Track of the Game
+- We need some "notes" for the computer to remember things like:
+- Where the basket is.
+  - Where the falling item is.
+  - Whether the game is running or not.
+  - The player’s score and misses.
 ```
 // Variables to track the game state
 let gameInterval = null; // The interval for the game loop
@@ -173,12 +174,10 @@ let misses = 0; // Number of missed items
 ```
 
 3. Move the Basket
-- Use the `keydown` event listener to move the basket left or right when arrow keys are pressed.
-- Update the basket's position using inline CSS.
-What does this do?
-- Check if the game is running. If not, ignore input.
-- Update the basketPosition based on key presses.
-- Apply the new position to the basket.
+- We want the player to move the basket left and right using the arrow keys also known as `keydown`.
+- When the player presses:
+  - Left arrow key: Move the basket to the left.
+  - Right arrow key: Move the basket to the right.
 ```
 // Move the basket with arrow keys
 document.addEventListener("keydown", (event) => {
@@ -196,6 +195,110 @@ document.addEventListener("keydown", (event) => {
   // Update the basket's position
   basket.style.left = `${basketPosition}%`;
 });
+```
+
+4. Make the Item Fall
+- The falling item needs to "fall" from the top of the screen down to the bottom.
+- We do this by moving the item’s position down a little bit every moment.
+```
+// Make the item fall down
+function updateFallingItem() {
+  fallingItemPosition.y += 6; // Move the item down
+  fallingItem.style.top = `${fallingItemPosition.y}px`; // Update how far down it is
+  fallingItem.style.left = `${fallingItemPosition.x}%`; // Update its horizontal position
+}
+```
+
+5. Check for Catches or Misses
+- If the item touches the basket, the player scores a point.
+- If the item falls past the basket, the player gets a "miss."
+```
+// Check if the player caught or missed the item
+function updateFallingItem() {
+  fallingItemPosition.y += 6; // Make the item fall
+  fallingItem.style.top = `${fallingItemPosition.y}px`; // Update its position
+  fallingItem.style.left = `${fallingItemPosition.x}%`;
+
+  // Check if the item is caught
+  if (
+    fallingItemPosition.y >= 380 && // Close to the basket
+    fallingItemPosition.x > basketPosition - 10 && // Overlaps with the basket
+    fallingItemPosition.x < basketPosition + 10
+  ) {
+    score++; // Add 1 to the score
+    document.getElementById("score").textContent = `Score: ${score}`; // Update the score on the screen
+    resetFallingItem(); // Reset the falling item
+
+    // Stop the game if the score reaches 10
+    if (score >= 10) {
+      stopGame();
+      alert("Congratulations! You won!");
+    }
+  }
+
+  // Check if the item is missed
+  if (fallingItemPosition.y > 400) {
+    misses++; // Add 1 to misses
+    document.getElementById("misses").textContent = `Misses: ${misses}`; // Update misses on the screen
+    resetFallingItem(); // Reset the falling item
+
+    // End the game if there are 3 misses
+    if (misses >= 3) {
+      stopGame();
+      alert("Game Over!");
+    }
+  }
+}
+```
+
+6. Reset the Falling Item
+- After the player catches or misses an item, it needs to "reset" back to the top of the screen and fall again.
+```
+// Reset the falling item to the top
+function resetFallingItem() {
+  fallingItemPosition = { x: Math.random() * 90, y: -30 }; // Start at a random position at the top
+}
+```
+
+7. Start the Game
+- The "Start Game" button will:
+  - Reset the score and misses.
+  - Start the falling item.
+```
+function startGame() {
+  if (isGameRunning) return; // Don’t restart if already running
+  isGameRunning = true; // Set the game to running
+  score = 0; // Reset the score
+  misses = 0; // Reset the misses
+  document.getElementById("score").textContent = `Score: ${score}`;
+  document.getElementById("misses").textContent = `Misses: ${misses}`;
+  startButton.disabled = true; // Disable the "Start Game" button
+  stopButton.disabled = false; // Enable the "Stop Game" button
+  gameInterval = setInterval(updateFallingItem, 30); // Start the falling loop
+}
+```
+
+8. Stop the Game
+- The "Stop Game" button will:
+- Stop the falling item.
+- Allow the player to restart.
+```
+function stopGame() {
+  if (!isGameRunning) return; // If the game isn’t running, do nothing
+  isGameRunning = false; // Set the game to stopped
+  clearInterval(gameInterval); // Stop the falling loop
+  startButton.disabled = false; // Enable the "Start Game" button
+  stopButton.disabled = true; // Disable the "Stop Game" button
+}
+```
+
+9. Add Button Controls
+- Make the "Start Game" and "Stop Game" buttons work.
+```
+// Add event listeners to the buttons
+startButton.addEventListener("click", startGame); // Start the game when clicked
+stopButton.addEventListener("click", stopGame); // Stop the game when clicked
+
 ```
 
 Ensure that the CSS and JavaScript files are linked correctly in your `index.html` file. The `<link>` tag for CSS should be inside the `<head>` section, and the `<script>` tag for JavaScript should be just before the closing `</body>` tag.
