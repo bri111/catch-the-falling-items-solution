@@ -20,7 +20,7 @@ Welcome to the Simple Website Tutorial! This guide will walk you through the ste
 
 ## Introduction
 
-In this tutorial, you'll learn how to create a simple website with an HTML structure, styled with CSS, and interactivity added using JavaScript. By the end of this guide, you will have a basic understanding of how these three technologies work together to create a functional webpage.
+In this project, you will create a game where the player controls a basket to catch falling items. The game utilizes HTML for structure, CSS for styling, and JavaScript for interactivity. The project is modular, with separate files for functionality.
 
 ## Project Structure
 
@@ -29,12 +29,13 @@ Create a project directory and set up the following file structure:
 simple-website/
 ├── index.html
 ├── styles.css
+├── scoreboard.js
 └── script.js
 ```
 
 ## Step-by-Step Guide
 
-### 1. Create the HTML File
+### 1. Create the HTML File --Only if file has not been created already
 
 Open your code editor and create a file named `index.html`. Add the following code:
 
@@ -44,30 +45,158 @@ Open your code editor and create a file named `index.html`. Add the following co
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Website</title>
+  <title>Catch the Falling Items</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  Hello World!
-  <script src="script.js"></script>
+  <h1>Catch the Falling Items!</h1>
+  <p id="score">Score: 0</p>
+  <p id="misses">Misses: 0</p>
+  <button id="start-game">Start Game</button>
+  <button id="stop-game" disabled>Stop Game</button>
+  <div id="game-area">
+    <div id="basket"></div>
+    <div id="falling-item"></div>
+  </div>
+  <script src="script.js" type="module"></script>
 </body>
 </html>
 ```
-### 2. Create the CSS File
+### 2. Create the CSS File --Only if file has not been created already
 
 Create a file named `styles.css` and add the following code to style your webpage:
 
 ```css
 body {
   font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f9;
+  overflow: hidden;
 }
+
+#game-area {
+  position: relative;
+  width: 500px;
+  height: 400px;
+  background: #e0f7fa;
+  border: 2px solid #007BFF;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+#basket {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 10px;
+  background: #007BFF;
+  border-radius: 5px;
+}
+
+#falling-item {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: red;
+  border-radius: 50%;
+}
+
 ```
 
-### 3. Create the JavaScript File
+### 3. Create 2 JavaScript Files
+
+Create a file named `scoreboard.js` --Only if file has not been created already
+```scoreboard
+export const scoreboard = {
+  score: 0,
+  misses: 0,
+  maxMisses: 3,
+
+  updateScore() {
+    this.score++;
+    document.getElementById("score").textContent = `Score: ${this.score}`;
+  },
+
+  updateMisses() {
+    this.misses++;
+    document.getElementById("misses").textContent = `Misses: ${this.misses}`;
+    if (this.misses >= this.maxMisses) {
+      alert("Game Over! Refresh to play again.");
+      stopGame();
+    }
+  },
+
+  reset() {
+    this.score = 0;
+    this.misses = 0;
+    document.getElementById("score").textContent = `Score: ${this.score}`;
+    document.getElementById("misses").textContent = `Misses: ${this.misses}`;
+  }
+};
+
+```
 
 Create a file named `script.js` 
+ 
 
-### 4. Link the CSS and JavaScript Files
+### 4. Step-by-Step Guide to Script.js
+
+1. Initialize Game Elements
+- Start by identifying the elements of your game in the HTML file.
+- Use `document.getElementById()` to get references to these elements
+```
+// Get references to HTML elements
+const basket = document.getElementById("basket"); // The basket element
+const fallingItem = document.getElementById("falling-item"); // The falling item element
+const startButton = document.getElementById("start-game"); // Start button
+const stopButton = document.getElementById("stop-game"); // Stop button
+```
+
+2. Define Game Variables
+- Create variables to track the game state, including the position of the basket and falling item.
+- Initialize variables to control the score, misses, and whether the game is running.
+- 
+```
+// Variables to track the game state
+let gameInterval = null; // The interval for the game loop
+let basketPosition = 50; // Basket position as a percentage of the game area width
+let fallingItemPosition = { x: Math.random() * 90, y: 0 }; // Random starting position for the falling item
+let isGameRunning = false; // Flag to track if the game is running
+let score = 0; // Player's score
+let misses = 0; // Number of missed items
+```
+
+3. Move the Basket
+- Use the `keydown` event listener to move the basket left or right when arrow keys are pressed.
+- Update the basket's position using inline CSS.
+What does this do?
+- Check if the game is running. If not, ignore input.
+- Update the basketPosition based on key presses.
+- Apply the new position to the basket.
+```
+// Move the basket with arrow keys
+document.addEventListener("keydown", (event) => {
+  if (!isGameRunning) return; // Ignore input if the game is not running
+
+  // Move the basket left
+  if (event.key === "ArrowLeft" && basketPosition > 0) {
+    basketPosition -= 7;
+  }
+  // Move the basket right
+  else if (event.key === "ArrowRight" && basketPosition < 90) {
+    basketPosition += 7;
+  }
+
+  // Update the basket's position
+  basket.style.left = `${basketPosition}%`;
+});
+```
 
 Ensure that the CSS and JavaScript files are linked correctly in your `index.html` file. The `<link>` tag for CSS should be inside the `<head>` section, and the `<script>` tag for JavaScript should be just before the closing `</body>` tag.
 
