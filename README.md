@@ -146,7 +146,7 @@ Create a file named `script.js`
 
 ### 4. Step-by-Step Guide to Script.js
 
-1. Find the Important Parts of the Game
+**1. Find the Important Parts of the Game**
 - We need to tell the computer where the basket, the falling item, and the buttons are in the HTML.
 - To do that, we "grab" them using JavaScript.
 ```
@@ -157,7 +157,7 @@ const startButton = document.getElementById("start-game"); // Start button
 const stopButton = document.getElementById("stop-game"); // Stop button
 ```
 
-2. Keep Track of the Game
+**2. Keep Track of the Game**
 - We need some "notes" for the computer to remember things like:
 - Where the basket is.
   - Where the falling item is.
@@ -173,7 +173,7 @@ let score = 0; // Player's score
 let misses = 0; // Number of missed items
 ```
 
-3. Move the Basket
+**3. Move the Basket**
 - We want the player to move the basket left and right using the arrow keys also known as `keydown`.
 - When the player presses:
   - Left arrow key: Move the basket to the left.
@@ -197,7 +197,7 @@ document.addEventListener("keydown", (event) => {
 });
 ```
 
-4. Make the Item Fall
+**4. Make the Item Fall**
 - The falling item needs to "fall" from the top of the screen down to the bottom.
 - We do this by moving the item’s position down a little bit every moment.
 ```
@@ -209,7 +209,7 @@ function updateFallingItem() {
 }
 ```
 
-5. Check for Catches or Misses
+**5. Check for Catches or Misses**
 - If the item touches the basket, the player scores a point.
 - If the item falls past the basket, the player gets a "miss."
 ```
@@ -251,7 +251,7 @@ function updateFallingItem() {
 }
 ```
 
-6. Reset the Falling Item
+**6. Reset the Falling Item**
 - After the player catches or misses an item, it needs to "reset" back to the top of the screen and fall again.
 ```
 // Reset the falling item to the top
@@ -260,7 +260,7 @@ function resetFallingItem() {
 }
 ```
 
-7. Start the Game
+**7. Start the Game**
 - The "Start Game" button will:
   - Reset the score and misses.
   - Start the falling item.
@@ -278,7 +278,7 @@ function startGame() {
 }
 ```
 
-8. Stop the Game
+**8. Stop the Game**
 - The "Stop Game" button will:
 - Stop the falling item.
 - Allow the player to restart.
@@ -292,7 +292,7 @@ function stopGame() {
 }
 ```
 
-9. Add Button Controls
+**9. Add Button Controls**
 - Make the "Start Game" and "Stop Game" buttons work.
 ```
 // Add event listeners to the buttons
@@ -316,7 +316,8 @@ Open your `index.html` file in a web browser to see your simple website in actio
 - Test your website in different browsers to ensure compatibility.
 
 ## Stretch Goals
-If you finish early, feel free to try out these additions to your website!
+If you finish early, feel free to try out these additions to your website
+- change the speed of the ball falling
 
 ### 6. Make it a Header!
 Enclose the "Hello World!" in an ``<h1>`` tag as shown here:
